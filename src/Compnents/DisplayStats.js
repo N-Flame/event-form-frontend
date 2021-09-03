@@ -1,6 +1,6 @@
 import React, {useState, useEffect} from 'react'
 import axios from 'axios'
-import { Bar } from 'react-chartjs-2';
+import { Bar, Line, Pie } from 'react-chartjs-2';
 import Container from '@material-ui/core/Container';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import { makeStyles } from '@material-ui/core/styles';
@@ -21,7 +21,7 @@ const useStyles = makeStyles((theme) => ({
       backgroundColor: theme.palette.secondary.main,
     },
     form: {
-      width: '100%', // Fix IE 11 issue.
+      width: '100%', 
       marginTop: theme.spacing(5),
     },
     submit: {
@@ -34,6 +34,17 @@ function DisplayStats() {
     const classes = useStyles();
     const [gender, setgender] = useState({male: 0, female: 0});
     const [Rank, setRank] = useState({1: 0, 2: 0, 3: 0, 0: 0});
+    const [selvel, setselvel] = useState("bar");
+    const [DBChange, setDBChange] = useState("Final");
+    const handlechange = (e) => {
+        e.preventDefault();
+        setselvel(e.target.value);
+    }
+    const DBhandleChange = (e) => {
+        e.preventDefault();
+        setDBChange(e.target.value);
+
+    }
     const [schoollist, setschoollist] = useState(["SITAICS", "SISPA",
     "SICMSS",
     "SISDSS",
@@ -47,7 +58,7 @@ function DisplayStats() {
     
     useEffect(async () => {
         const result = await axios(
-            'http://localhost:5001/stats'
+            `http://localhost:5001/stats?q=${DBChange}`
         );
         console.log(result.data);
         let res = result.data;
@@ -72,13 +83,13 @@ function DisplayStats() {
             }
         }
         setschoolvalue(tempx);
-    }, []);
+    }, [DBChange]);
 
     const data = {
         labels: ['Male', 'Female'],
         datasets: [
           {
-            label: '# of Votes',
+            label: 'Gender',
             data: [gender.male, gender.female],
             backgroundColor: [
               'rgba(255, 99, 132, 0.2)',
@@ -96,9 +107,11 @@ function DisplayStats() {
         labels: ['First', 'Second', 'Third', 'Participated'],
         datasets: [
           {
-            label: '# of Votes',
+            label: 'Ranks',
             data: [Rank[1], Rank[2], Rank[3], Rank[0]],
             backgroundColor: [
+              'rgba(255, 99, 132, 0.2)',
+              'rgba(54, 162, 235, 0.2)',
               'rgba(255, 99, 132, 0.2)',
               'rgba(54, 162, 235, 0.2)',
             ],
@@ -114,11 +127,17 @@ function DisplayStats() {
         labels: schoollist,
         datasets: [
           {
-            label: '# of Votes',
+            label: 'School Wise Participation',
             data: schoolvalue,
             backgroundColor: [
               'rgba(255, 99, 132, 0.2)',
               'rgba(54, 162, 235, 0.2)',
+              'rgba(150, 199, 232, 0.2)',
+              'rgba(154, 262, 35, 0.2)',
+              'rgba(25, 99, 12, 0.2)',
+              'rgba(123, 112, 135, 0.2)',
+              'rgba(12, 190, 162, 0.2)',
+              'rgba(100, 100, 200, 0.2)'
             ],
             borderColor: [
               'rgba(255, 99, 132, 1)',
@@ -141,18 +160,32 @@ function DisplayStats() {
         },
       };
       
-    return (
+    return ( 
+        <>
+        <div>
+            <select className="Beauti" type="select" onChange={handlechange} value={selvel}>
+                    <option value="bar">Bar</option>
+                    <option value="line">Line</option>
+                    <option value="pie">Pie</option>
+            </select>
+            <select className="Beauti" type="select" onChange={DBhandleChange} value={DBChange}>
+                <option value="Final">Final DB</option>
+                <option value="Provisional">Provisional DB</option>
+            </select>
+        </div>
         <div className="graph_collection">
-            <div className="Graph">
-                <Bar data={data} options={options} />
+            <div className={"Graph " + (selvel === "pie" ? "Shrink" : "")}>
+                {selvel === "bar" ? <Bar data={data} options={options} /> : (selvel === "line" ? <Line data={data} options={options} /> : <Pie data={data} options={options} />)}
             </div>
-            <div className="Graph">
-                <Bar data={data1} options={options} />
+            <div className = {"Graph " + (selvel === "pie" ? "Shrink" : "")}>
+            {selvel === "bar" ? <Bar data={data1} options={options} /> : (selvel === "line" ? <Line data={data1} options={options} /> : <Pie data={data1} options={options} />)}
             </div>
-            <div className="Graph">
-                <Bar data={data2} options={options} />
+            <div className = {"Graph " + (selvel === "pie" ? "Shrink" : "")}>
+            {selvel === "bar" ? <Bar data={data2} options={options} /> : (selvel === "line" ? <Line data={data2} options={options} /> : <Pie data={data2} options={options} />)}
+
             </div>
         </div>    
+        </>
     )
 }
 

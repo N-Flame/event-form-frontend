@@ -174,3 +174,14 @@ input[type=date]:focus::-webkit-datetime-edit {
 .Graph {
   width: 540px;
 }
+.graph_collection{
+  display: grid;
+  grid-template-columns: auto auto;
+}
+.Shrink{
+  width: 380px;
+}
+.Beauti{
+  color:blue;
+  background-color: orange;
+}

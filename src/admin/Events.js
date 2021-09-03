@@ -39,7 +39,9 @@ import {
 } from 'react-admin';
 import { makeStyles } from '@material-ui/core/styles';
 import Paper from '@material-ui/core/Paper';
+import { APIButton } from "../Compnents/APIButton";
 import Grid from '@material-ui/core/Grid';
+import { Button } from "@material-ui/core";
 
 
 // Style for Expand View, Material UI
@@ -170,6 +172,8 @@ export const EventList = ({ ...props }) => (
                 <TextField source="Last_Name" label="Last Name" />
                 <TextField source="Course_Name" label="Course Name" />
                 <TextField source="Semester" label="Semester" />
+                <APIButton type="update"  payload_data={{"Status": 1}} label="Accept" />
+                <APIButton type="delete"  payload_data={{}} label="Reject" />
             </Datagrid>
         </List>
     </>
