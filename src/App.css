@@ -158,3 +158,19 @@ input[type=date]:focus::-webkit-datetime-edit {
   width:auto;
   height: 50px;
 }
+
+/* Element | http://localhost:3000/ */
+
+.navbar-nav {
+  width: 218px;
+}
+
+/* Element | http://localhost:3000/ */
+
+.navbar-nav > li:nth-child(1) {
+  width: 110px;
+}
+
+.Graph {
+  width: 540px;
+}

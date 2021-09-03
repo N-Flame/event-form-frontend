@@ -20,6 +20,7 @@ import Select from '@material-ui/core/Select';
 import NativeSelect from '@material-ui/core/NativeSelect';
 import "../App.css"
 import axios, {post} from 'axios'
+import { Redirect } from 'react-router-dom';
 
 
 const useStyles = makeStyles((theme) => ({
@@ -61,6 +62,8 @@ const initialValues = {
 export default function SignUp() {
   const classes = useStyles();
   const [values, setValues] = useState(initialValues);
+  const [submit, setSubmit] = useState(true);
+
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
@@ -68,6 +71,25 @@ export default function SignUp() {
       ...values,
       [name]: value,
     });
+    
+    console.log(values);
+    
+    if (   values.rollno !== "" 
+    && values.student_fname !== "" 
+    && values.student_lname !== "" 
+    && values.email !== ""
+    && values.gender_option !== "" 
+    && values.school_name !== "" 
+    && values.course_name !== "" 
+    && values.sem_option !== "" 
+    && values.event_name !== "" 
+    && values.event_type !== "" 
+    && values.event_level !== "" 
+    && values.rank_option !== "" 
+    && values.event_date !== ""){
+        console.log("ok");
+        setSubmit(false);
+    }
   };
 
   const handleFileChange = (e) => {
@@ -89,7 +111,9 @@ export default function SignUp() {
       axios
         .post(url, values)
         .then(response => {
-            console.log(response)
+            setValues(initialValues);
+            alert(`your task has been successfully Added!`);
+            
         })
         .catch(error => {
             console.log(error);
@@ -105,10 +129,10 @@ export default function SignUp() {
         </Typography>
         <form className={classes.form} noValidate onSubmit={handleSubmit}>
           <Grid container spacing={5}>
-            <Grid item xs={12}>
+            <Grid item xs={12} sm={6}>
               <TextField
                 name="rollno"
-                variant="outlined"
+                variant="standard"
                 required
                 fullWidth
                 id="rollno"
@@ -194,14 +218,14 @@ export default function SignUp() {
 
             <Grid item xs={12} sm={6}>
                 <TextField id="sem_option" name="sem_option" label="Semester" value={values.sem_option} onChange={handleInputChange} select fullWidth >
-                    <MenuItem value={1}>I</MenuItem>
-                    <MenuItem value={2}>II</MenuItem>
-                    <MenuItem value={3}>III</MenuItem>
-                    <MenuItem value={4}>IV</MenuItem>
-                    <MenuItem value={5}>V</MenuItem>
-                    <MenuItem value={6}>VI</MenuItem>
-                    <MenuItem value={7}>VII</MenuItem>
-                    <MenuItem value={8}>VIII</MenuItem>
+                    <MenuItem value="1">I</MenuItem>
+                    <MenuItem value="2">II</MenuItem>
+                    <MenuItem value="3">III</MenuItem>
+                    <MenuItem value="4">IV</MenuItem>
+                    <MenuItem value="5">V</MenuItem>
+                    <MenuItem value="6">VI</MenuItem>
+                    <MenuItem value="7">VII</MenuItem>
+                    <MenuItem value="8">VIII</MenuItem>
                 </TextField>
             </Grid>
 
@@ -243,10 +267,10 @@ export default function SignUp() {
 
             <Grid item xs={12} sm={6}>
                 <TextField id="rank_option" name="rank_option" label="Rank" value={values.rank_option} onChange={handleInputChange} select fullWidth >
-                    <MenuItem value={1}>1<sup>st</sup></MenuItem>
-                    <MenuItem value={2}>2<sup>nd</sup></MenuItem>
-                    <MenuItem value={3}>3<sup>rd</sup></MenuItem>
-                    <MenuItem value={0}>Participated</MenuItem>
+                    <MenuItem value="1">1<sup>st</sup></MenuItem>
+                    <MenuItem value="2">2<sup>nd</sup></MenuItem>
+                    <MenuItem value="3">3<sup>rd</sup></MenuItem>
+                    <MenuItem value="0">Participated</MenuItem>
                 </TextField>
             </Grid>
             
@@ -263,7 +287,7 @@ export default function SignUp() {
                 value={values.event_date}
               />
             </Grid>
-            <Grid item xs={12} sm={6}>
+           {/* <Grid item xs={12} sm={6}>
               <TextField
                 variant="standard"
                 required
@@ -274,7 +298,7 @@ export default function SignUp() {
                 label="Event Document (Proof)"
                 value={values.proof}
               />
-            </Grid>
+  </Grid>*/}
           </Grid>
           <Button
             type="submit"
@@ -282,6 +306,7 @@ export default function SignUp() {
             variant="contained"
             color="primary"
             className={classes.submit}
+            disabled={submit}
           >
             Submit Event
           </Button>
